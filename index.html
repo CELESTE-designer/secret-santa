@@ -1,0 +1,694 @@
+
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secret Santa | Let the Magic Begin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --green: #071b16;
+  --green-light: #12372a;
+  --gold: #f5d477;
+  --gold-dark: #c49a40;
+  --red: #a52b35;
+  --cream: #fff8e9;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--green);
+  color: var(--cream);
+  font-family: "DM Sans", sans-serif;
+  overflow-x: hidden;
+}
+
+button { font: inherit; }
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 45%, #194b35 0%, transparent 55%),
+    linear-gradient(120deg, #06130f, #0b291e 55%, #071610);
+}
+
+/* Golden atmospheric light */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 100%,
+      #c49a401c, transparent 48%),
+    linear-gradient(90deg,
+      #03100dd9, transparent 35%, transparent 65%, #03100d99);
+}
+
+/* Decorative Christmas trees */
+.forest {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+  opacity: .25;
+  overflow: hidden;
+}
+
+.tree {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-left: 100px solid transparent;
+  border-right: 100px solid transparent;
+  border-bottom: 340px solid #020b08;
+  filter: drop-shadow(0 0 24px #000);
+}
+
+.tree::before {
+  content: "";
+  position: absolute;
+  top: 100px;
+  left: -75px;
+  border-left: 75px solid transparent;
+  border-right: 75px solid transparent;
+  border-bottom: 250px solid #030e09;
+}
+
+.tree::after {
+  content: "";
+  position: absolute;
+  top: 205px;
+  left: -47px;
+  border-left: 47px solid transparent;
+  border-right: 47px solid transparent;
+  border-bottom: 160px solid #020906;
+}
+
+.tree:nth-child(1) { transform: scale(.85); transform-origin: bottom; }
+.tree:nth-child(2) { transform: scale(1.25); transform-origin: bottom; }
+.tree:nth-child(3) { transform: scale(.95); transform-origin: bottom; }
+.tree:nth-child(4) { transform: scale(1.35); transform-origin: bottom; }
+
+/* Navigation */
+nav {
+  width: min(1160px, 90%);
+  margin: 0 auto;
+  padding: 27px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #ffffff15;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold);
+  text-decoration: none;
+  font-family: "Cinzel", serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.brand-icon {
+  font-size: 27px;
+  filter: drop-shadow(0 0 9px #f5d47766);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-right a {
+  text-decoration: none;
+  color: #eee9dd;
+  font-size: 12px;
+  transition: color .25s;
+}
+
+.nav-right a:hover { color: var(--gold); }
+
+.music-toggle {
+  border: 1px solid #f5d47755;
+  background: #ffffff08;
+  color: var(--gold);
+  border-radius: 50px;
+  padding: 9px 13px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: .25s;
+}
+
+.music-toggle:hover {
+  background: #f5d47718;
+  border-color: var(--gold);
+}
+
+/* Hero content */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  width: min(950px, 90%);
+  margin: auto;
+  padding: 75px 0 95px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  animation: appear 1s both;
+}
+
+.eyebrow::before, .eyebrow::after {
+  content: "";
+  width: 35px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+
+.eyebrow::after {
+  transform: rotate(180deg);
+}
+
+h1 {
+  margin: 25px 0 0;
+  font-family: "Cinzel", serif;
+  font-weight: 500;
+  line-height: .99;
+  letter-spacing: clamp(1px, .5vw, 7px);
+  font-size: clamp(48px, 9vw, 108px);
+  animation: titleIn 1.2s .1s both;
+}
+
+h1 .secret {
+  display: block;
+  color: var(--cream);
+}
+
+h1 .santa {
+  display: block;
+  margin-top: 12px;
+  color: var(--gold);
+  font-weight: 400;
+  text-shadow: 0 0 45px #f5d47725;
+}
+
+.subtitle {
+  max-width: 480px;
+  margin: 27px auto 0;
+  color: #d3d8ce;
+  font-size: 14px;
+  line-height: 1.9;
+  animation: appear 1s .4s both;
+}
+
+.santa-stamp {
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  margin: 30px 0 0;
+  border: 1px solid #f5d47766;
+  border-radius: 50%;
+  background: #f5d47709;
+  box-shadow: 0 0 35px #f5d4770d, inset 0 0 20px #f5d47708;
+  font-size: 31px;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Main gold CTA */
+.cta {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-width: 255px;
+  margin-top: 35px;
+  padding: 18px 27px;
+  overflow: hidden;
+  border: 1px solid #ffe9a6;
+  border-radius: 3px;
+  background: linear-gradient(120deg, #d5ad4d, #ffe69a 48%, #d3a53b);
+  color: #14271a;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  box-shadow: 0 8px 35px #e8bd5140;
+  cursor: pointer;
+  transition: transform .3s, box-shadow .3s;
+  animation: appear 1s .6s both;
+}
+
+.cta::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -80%;
+  left: -45%;
+  width: 30%;
+  height: 260%;
+  background: #ffffff9c;
+  transform: rotate(25deg);
+  transition: left .65s;
+}
+
+.cta:hover::before { left: 130%; }
+
+.cta:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 45px #e8bd5166;
+}
+
+.cta:active { transform: scale(.98); }
+
+.cta-arrow {
+  font-size: 19px;
+  line-height: 1;
+}
+
+/* Decorative ornaments */
+.ornament {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 140px;
+  background: linear-gradient(#d6b45e, #d6b45e99);
+  transform-origin: top;
+  pointer-events: none;
+  opacity: .65;
+}
+
+.ornament::after {
+  content: "";
+  position: absolute;
+  bottom: -27px;
+  left: -18px;
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  border: 1px solid #e6c56f;
+  background:
+    radial-gradient(circle at 30% 25%, #fff3bb, transparent 15%),
+    radial-gradient(circle at 35% 30%, #c43b39, #6c131c 70%);
+  box-shadow: inset -5px -5px 10px #25070c88,
+              0 0 15px #e9bf4b22;
+}
+
+.ornament.one { left: 9%; height: 120px; }
+.ornament.two { right: 11%; height: 175px; transform: rotate(5deg); }
+.ornament.three { left: 22%; height: 80px; transform: rotate(-7deg); opacity: .4; }
+.ornament.two::after {
+  background: radial-gradient(circle at 30% 25%, #fff3bb, transparent 15%),
+              radial-gradient(circle at 35% 30%, #e7cb76, #9e7126 70%);
+}
+
+/* Snow */
+#snow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Footer */
+.hero-footer {
+  position: relative;
+  z-index: 2;
+  width: min(1160px, 90%);
+  margin: 0 auto;
+  padding: 19px 0 23px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-top: 1px solid #ffffff15;
+  color: #a8b5a9;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.footer-star { color: var(--gold); }
+
+.footer-center {
+  color: var(--gold);
+  font-size: 17px;
+}
+
+/* Welcome reveal after clicking */
+.welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: #020b08eF;
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s, visibility .4s;
+}
+
+.welcome.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.welcome-card {
+  position: relative;
+  width: min(440px, 100%);
+  padding: 50px 28px;
+  text-align: center;
+  border: 1px solid #e4c36b77;
+  background: linear-gradient(145deg, #123427, #071710);
+  box-shadow: 0 0 80px #e5c16615;
+  transform: translateY(15px) scale(.98);
+  transition: transform .4s;
+}
+
+.welcome.active .welcome-card {
+  transform: translateY(0) scale(1);
+}
+
+.welcome-card .gift {
+  font-size: 49px;
+}
+
+.welcome-card h2 {
+  color: var(--gold);
+  font-family: "Cinzel", serif;
+  font-size: 27px;
+  font-weight: 500;
+  margin: 20px 0 12px;
+}
+
+.welcome-card p {
+  color: #d5ded5;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.close-modal {
+  margin-top: 20px;
+  padding: 12px 25px;
+  border: 1px solid #e5c36d;
+  color: var(--gold);
+  background: transparent;
+  cursor: pointer;
+  letter-spacing: 1px;
+  font-size: 11px;
+}
+
+.close-modal:hover { background: #e5c36d15; }
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes titleIn {
+  from { opacity: 0; transform: translateY(20px); filter: blur(8px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-9px) rotate(3deg); }
+}
+
+@media (max-width: 600px) {
+  nav { padding: 20px 0; }
+  .nav-right { gap: 12px; }
+  .nav-right a { font-size: 11px; }
+  .nav-right a:nth-child(2),
+  .nav-right a:nth-child(3) { display: none; }
+  .music-toggle { padding: 8px 10px; font-size: 10px; }
+  .hero-content { padding: 85px 0 75px; }
+  .eyebrow { letter-spacing: 2px; font-size: 9px; }
+  .subtitle { font-size: 13px; max-width: 330px; }
+  .santa-stamp { width: 62px; height: 62px; font-size: 27px; }
+  .cta { min-width: 235px; padding: 17px 20px; }
+  .ornament.one { left: 5%; }
+  .ornament.two { right: 6%; }
+  .ornament.three { display: none; }
+  .hero-footer { font-size: 9px; }
+  .footer-center { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<main class="hero" id="home">
+
+  <div class="forest" aria-hidden="true">
+    <div class="tree"></div>
+    <div class="tree"></div>
+    <div class="tree"></div>
+    <div class="tree"></div>
+  </div>
+
+  <canvas id="snow" aria-hidden="true"></canvas>
+
+  <div class="ornament one" aria-hidden="true"></div>
+  <div class="ornament two" aria-hidden="true"></div>
+  <div class="ornament three" aria-hidden="true"></div>
+
+  <nav>
+    <a href="#home" class="brand">
+      <span class="brand-icon">✳</span>
+      <span>SECRET SANTA</span>
+    </a>
+
+    <div class="nav-right">
+      <a href="#home">Kryefaqja</a>
+      <a href="#tradita">Magjia</a>
+      <button class="music-toggle" id="musicToggle"
+              aria-label="Aktivizo muzikën festive">
+        ♫ Muzika: OFF
+      </button>
+    </div>
+  </nav>
+
+  <section class="hero-content" id="tradita">
+    <div class="eyebrow">Një sezon plot magji</div>
+
+    <h1>
+      <span class="secret">SECRET</span>
+      <span class="santa">SANTA</span>
+    </h1>
+
+    <p class="subtitle">
+      Një dhuratë e vogël, një surprizë e madhe,
+      një kujtim që mbetet. Mirë se erdhe në
+      sezonin më magjik të vitit.
+    </p>
+
+    <div class="santa-stamp" aria-label="Dhuratë festive">
+      🎁
+    </div>
+
+    <button class="cta" id="startButton">
+      <span>LE TE NISE FESTA</span>
+      <span class="cta-arrow">↗</span>
+    </button>
+  </section>
+
+  <footer class="hero-footer">
+    <span>MADE FOR THE MAGIC <span class="footer-star">✦</span></span>
+    <span class="footer-center">❄</span>
+    <span>LET IT SNOW · LET IT GLOW</span>
+  </footer>
+</main>
+
+<!-- Welcome popup: replace this with the next event page later -->
+<div class="welcome" id="welcome" role="dialog"
+     aria-modal="true" aria-labelledby="welcomeTitle">
+  <div class="welcome-card">
+    <div class="gift">🎅🏻</div>
+    <h2 id="welcomeTitle">Magjia fillon!</h2>
+    <p>
+      Përgatitu për surpriza, të qeshura dhe
+      një Secret Santa që nuk do ta harrosh.
+      Festa sapo ka nisur!
+    </p>
+    <button class="close-modal" id="closeModal">
+      LE TË VAZHDOJMË ✨
+    </button>
+  </div>
+</div>
+
+<script>
+/* Snowfall animation */
+(() => {
+  const canvas = document.getElementById("snow");
+  const ctx = canvas.getContext("2d");
+  let width, height, flakes = [];
+  let animationFrame;
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = canvas.clientWidth;
+    height = canvas.clientHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    flakes = Array.from(
+      { length: Math.min(130, Math.floor(width / 7)) },
+      () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 2.1 + .4,
+        speed: Math.random() * .8 + .25,
+        drift: Math.random() * .5 - .25,
+        opacity: Math.random() * .6 + .2
+      })
+    );
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (const f of flakes) {
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,248,225,${f.opacity})`;
+      ctx.fill();
+
+      f.y += f.speed;
+      f.x += f.drift + Math.sin(f.y * .01) * .25;
+
+      if (f.y > height + 5) {
+        f.y = -5;
+        f.x = Math.random() * width;
+      }
+
+      if (f.x < -5) f.x = width + 5;
+      if (f.x > width + 5) f.x = -5;
+    }
+
+    animationFrame = requestAnimationFrame(draw);
+  }
+
+  window.addEventListener("resize", resize);
+  resize();
+  draw();
+})();
+
+/* Start button and welcome popup */
+const welcome = document.getElementById("welcome");
+const startButton = document.getElementById("startButton");
+const closeModal = document.getElementById("closeModal");
+
+startButton.addEventListener("click", async () => {
+  welcome.classList.add("active");
+
+  try {
+    await music.play();
+    musicOn = true;
+    musicToggle.textContent = "♫ Muzika: ON";
+  } catch (error) {
+    console.log("Muzika nuk mundi të niste.");
+  }
+
+  closeModal.focus();
+});
+
+closeModal.addEventListener("click", () => {
+  welcome.classList.remove("active");
+  startButton.focus();
+});
+
+welcome.addEventListener("click", event => {
+  if (event.target === welcome) {
+    welcome.classList.remove("active");
+    startButton.focus();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    welcome.classList.remove("active");
+  }
+});
+
+/*
+  OPTIONAL CHRISTMAS MUSIC
+  Place a legally obtained audio file named christmas.mp3
+  in the same folder as index.html.
+*/
+const musicToggle = document.getElementById("musicToggle");
+const music = new Audio("./christmas.mp3");
+music.loop = true;
+music.volume = 0.35;
+
+let musicOn = false;
+
+musicToggle.addEventListener("click", async () => {
+  if (!musicOn) {
+    try {
+      await music.play();
+      musicOn = true;
+      musicToggle.textContent = "♫ Muzika: ON";
+    } catch (error) {
+      musicToggle.textContent = "♫ Provo përsëri";
+      console.warn("Muzika nuk mund të luhet:", error);
+    }
+  } else {
+    music.pause();
+    musicOn = false;
+    musicToggle.textContent = "♫ Muzika: OFF";
+  }
+});
+</script>
+</body>
+</html>
